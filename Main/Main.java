@@ -11,19 +11,18 @@ import javax.swing.JFrame;
 
 import game.Game;
 import input.Keyboard;
-import gameobject.GameObject;
-import game.Game;
+
 
 public class Main extends Canvas implements Runnable {
 	public static void main(String[] args) throws InterruptedException {
 
-//		System.out.println("Welcome to 2048");
-//		Thread.sleep(2000);
-//		System.out.println("To play, you can use WASD key or the arrow keys");
-//		Thread.sleep(2000);
-//		System.out.println("Press the R key to restart the game!");
-//		Thread.sleep(2000);
-//		System.out.println("Have fun!");
+		System.out.println("Welcome to 2048");
+		Thread.sleep(2000);
+		System.out.println("To play, you can use WASD key or the arrow keys");
+		Thread.sleep(2000);
+		System.out.println("Press the R key to restart the game!");
+		Thread.sleep(2000);
+		System.out.println("Have fun!");
 		Main m = new Main();
 		m.frame.setTitle("2048");
 		m.frame.add(m);
