@@ -15,7 +15,6 @@ import input.Keyboard;
 
 public class Main extends Canvas implements Runnable {
 	public static void main(String[] args) throws InterruptedException {
-
 		System.out.println("Welcome to 2048");
 		Thread.sleep(2000);
 		System.out.println("To play, you can use WASD key or the arrow keys");
@@ -31,9 +30,7 @@ public class Main extends Canvas implements Runnable {
 		m.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		m.frame.setAlwaysOnTop(true);
 		m.start();
-
 	}
-
 
 	//Making the canvas, the size and scale of the game. can make smaller or bigger
 	public static final int WIDTH = 400, HEIGHT = 400;
