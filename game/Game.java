@@ -17,10 +17,9 @@ import input.Keyboard;
 public class Game {
 
 	public static List<GameObject> objects;
-	
-	public static boolean moving = false, hasMoved = true, somethingIsMoving = false;
-	public static int dir = 0;
-	
+	public static boolean moving, Moved, somethingIsMoving;
+	public static int direction;
+
 	private Random rand = new Random();
 	
 	public Game() {
@@ -30,7 +29,7 @@ public class Game {
 	public void init() {
 		objects = new ArrayList<GameObject>();
 		moving = false;
-		hasMoved = true;
+		Moved = true;
 		somethingIsMoving = false;
 		spawn();
 	}
@@ -38,41 +37,46 @@ public class Game {
 	public void update() {
 		if(Keyboard.keyUp(KeyEvent.VK_R)) {
 			init();
-		}
+		} //Restarts the game
 		
 		for(int i = 0; i < objects.size(); i++) {
-			objects.get(i).update();
-		}
-		
+			objects.get(i).move();
+		} //Updates every object
 		checkForValueIncrease();
-		
 		movingLogic();
 	}
-	
 
 	private void checkForValueIncrease() {
 		for(int i = 0; i < objects.size(); i++) {
 			for(int j = 0; j < objects.size(); j++) {
-				if(i == j) continue;
+				if(i == j) { //Checking if its stacked
+					continue;
+				}
+				//If the objects are the same and stacked together, it adds them
 				if(objects.get(i).x == objects.get(j).x && objects.get(i).y == objects.get(j).y && !objects.get(i).remove && !objects.get(j).remove) {
-					objects.get(j).remove = true;
-					objects.get(i).value *= 2;
-					objects.get(i).createSprite();
+					objects.get(j).remove = true; // Deletes 1
+					objects.get(i).value *= 2; // Doubles 1
+					objects.get(i).createSprite(); // Creates the new sprite created
 				}
 			}
 		}
 		for(int i = 0; i < objects.size(); i++) {
-			if(objects.get(i).remove) objects.remove(i);
+			if(objects.get(i).remove == true) {
+				objects.remove(i);
+			}
 		}
-		System.out.println(objects.size());
+//		System.out.println(objects.size());
 	}
 
 	private void spawn() {
-		if(objects.size() == 16) return;
+		//If there are already 16 items, game will not spawn anything else
+		if(objects.size() == ((Main.WIDTH/100)*(Main.WIDTH/100))){
+			return;
+		}
 		
 		boolean available = false;
 		int x = 0, y = 0;
-		while(!available) {
+		while(available == false) {
 			x = rand.nextInt(4);
 			y = rand.nextInt(4);
 			boolean isAvailable = true;
@@ -81,7 +85,9 @@ public class Game {
 					isAvailable = false;
 				}
 			}
-			if(isAvailable) available = true;
+			if(isAvailable == true) {
+				available = true;
+			}
 		}
 		objects.add(new GameObject(x * 100, y * 100));
 	}
@@ -90,62 +96,62 @@ public class Game {
 		somethingIsMoving = false;
 		for(int i = 0; i < objects.size(); i++) {
 			if(objects.get(i).moving) {
-				somethingIsMoving = true;
+				somethingIsMoving = true; //Checking if the object is moving
 			}
 		}
-		if(!somethingIsMoving) {
+		if(somethingIsMoving == false) { // Nothing is moving
 			moving = false;
 			for(int i = 0; i < objects.size(); i++) {
-				objects.get(i).hasMoved = false;
+				objects.get(i).Moved = false;
 			}
 		}
-		if(!moving && hasMoved) {
+		if(moving == false && Moved) { //If we have moved and not moving, it will spawn a new sprite
 			spawn();
-			hasMoved = false;
+			Moved = false;
 		}
-		if(!moving && !hasMoved) {
-			if(Keyboard.keyDown(KeyEvent.VK_A)) {
-				hasMoved = true;
+		if(moving == false && Moved == false) { //If we havent moved and we are not moving, we move
+			if(Keyboard.keyDown(KeyEvent.VK_LEFT) || Keyboard.keyDown(KeyEvent.VK_A)) {
+				Moved = true;
 				moving = true;
-				dir = 0;
-			}else if(Keyboard.keyDown(KeyEvent.VK_D)) {
-				hasMoved = true;
+				direction = 0;
+			}else if(Keyboard.keyDown(KeyEvent.VK_RIGHT) || Keyboard.keyDown(KeyEvent.VK_D)) {
+				Moved = true;
 				moving = true;
-				dir = 1;
-			}else if(Keyboard.keyDown(KeyEvent.VK_W)) {
-				hasMoved = true;
+				direction = 1;
+			}else if(Keyboard.keyDown(KeyEvent.VK_UP) || Keyboard.keyDown(KeyEvent.VK_W)) {
+				Moved = true;
 				moving = true;
-				dir = 2;
-			}else if(Keyboard.keyDown(KeyEvent.VK_S)) {
-				hasMoved = true;
+				direction = 2;
+			}else if(Keyboard.keyDown(KeyEvent.VK_DOWN) || Keyboard.keyDown(KeyEvent.VK_S)) {
+				Moved = true;
 				moving = true;
-				dir = 3;
+				direction = 3;
 			}
 		}
 	}
 	
 	public void render() {
-		Renderer.renderBackground();
+		Renderer.colorBackground();
 
+		//Rendering the sprites
 		for(int i = 0; i < objects.size(); i++) {
 			objects.get(i).render();
 		}
-		
+
+		//Rendering the background from Renderer.java
 		for(int i = 0 ; i < Main.pixels.length; i++) {
 			Main.pixels[i] = Renderer.pixels[i];
 		}
 	}
 	
-	public void renderText(Graphics2D g) {
-		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+	public void renderText(Graphics2D g) { //displays the number text
 		g.setFont(new Font("Verdana", 0, 100));
 		g.setColor(Color.BLACK);
 		
 		for(int i = 0; i < objects.size(); i++) {
-			GameObject o = objects.get(i);
-			String s = o.value + "";
+			String s = objects.get(i).value + "";
 			int sw = (int) (g.getFontMetrics().stringWidth(s) / 2 / Main.scale);
-			g.drawString(s, (int) (o.x + o.width / 2 - sw) * Main.scale, (int) (o.y + o.height / 2 + 18) * Main.scale);
+			g.drawString(s, (int) (objects.get(i).x + objects.get(i).width / 2 - sw) * Main.scale, (int) (objects.get(i).y + objects.get(i).height / 2 + 18) * Main.scale); //Getting the number
 		}
 		
 	}	
