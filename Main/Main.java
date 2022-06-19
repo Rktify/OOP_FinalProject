@@ -31,12 +31,7 @@ public class Main extends Canvas implements Runnable {
 		m.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		m.frame.setAlwaysOnTop(true);
 		m.start();
-		//Game over :(
-		if(Game.objects.size() == ((Main.WIDTH/100)*(Main.WIDTH/100))) {
-			Thread.sleep(2000);
-			System.out.println("You lost :(");
-			System.exit(0);
-		}
+
 	}
 
 
