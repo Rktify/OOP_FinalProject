@@ -3,7 +3,6 @@ package game;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
-import java.awt.RenderingHints;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
@@ -70,7 +69,7 @@ public class Game {
 			System.out.println("You lost :(");
 			System.exit(0);
 		}
-//		System.out.println(objects.size());
+		//System.out.println(objects.size());
 	}
 
 	private void spawn() {
@@ -86,7 +85,7 @@ public class Game {
 			y = rand.nextInt(4);
 			boolean isAvailable = true;
 			for(int i = 0 ; i < objects.size(); i++) {
-				if(objects.get(i).x / 100 == x && objects.get(i).y / 100 == y) {
+				if(objects.get(i).x / 100 == x && objects.get(i).y / 100 == y) { //Checks if the slots are available or not and in this case, it is not.
 					isAvailable = false;
 				}
 			}
@@ -94,7 +93,7 @@ public class Game {
 				available = true;
 			}
 		}
-		objects.add(new GameObject(x * 100, y * 100));
+		objects.add(new GameObject(x * 100, y * 100)); //Spawns in the new objects at certain points
 	}
 
 	private void movingLogic() {
