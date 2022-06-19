@@ -9,46 +9,46 @@ import graphics.Sprite;
 
 public class GameObject {
 
+	//Declarations
 	public double x, y;
 	public int width, height;
 	public Sprite sprite;
-	public int value, speed = 8;
-	public boolean moving = false, remove = false, hasMoved = false;
-	
+	public int value, speed = 20;
+	public boolean moving, remove, Moved;
 	Random rand = new Random();
 	
 	public GameObject(double x, double y) {
 		this.x = x;
 		this.y = y;
-		this.value = (rand.nextBoolean() ? 2 : 4);
+		this.value = (rand.nextBoolean() ? 2 : 4); // Basically the value is gonna 50% be 2 or 4
 		createSprite();
 		this.width = sprite.width;
 		this.height = sprite.height;
 	}
-	
-	public void createSprite() {
+
+	public void createSprite() { //Creating every object
 		if(this.value == 2) {
-			this.sprite = new Sprite(100, 100, 0xefe5db);
+			this.sprite = new Sprite(100, 100, 0xeeee4da);
 		}else if(this.value == 4) {
-			this.sprite = new Sprite(100, 100, 0xece0c8);
+			this.sprite = new Sprite(100, 100, 0xede0c8);
 		}else if(this.value == 8) {
-			this.sprite = new Sprite(100, 100, 0xf1b078);
+			this.sprite = new Sprite(100, 100, 0xf2b179);
 		}else if(this.value == 16) {
-			this.sprite = new Sprite(100, 100, 0xEB8C52);
+			this.sprite = new Sprite(100, 100, 0xf59563);
 		}else if(this.value == 32) {
-			this.sprite = new Sprite(100, 100, 0xF57C5F);
+			this.sprite = new Sprite(100, 100, 0xf67c5f);
 		}else if(this.value == 64) {
-			this.sprite = new Sprite(100, 100, 0xEC563D);
+			this.sprite = new Sprite(100, 100, 0xf65e3b);
 		}else if(this.value == 128) {
-			this.sprite = new Sprite(100, 100, 0xF2D86A);
+			this.sprite = new Sprite(100, 100, 0xedcf72);
 		}else if(this.value == 256) {
-			this.sprite = new Sprite(100, 100, 0xECC750);
+			this.sprite = new Sprite(100, 100, 0xedcc61);
 		}else if(this.value == 512) {
-			this.sprite = new Sprite(100, 100, 0xE5BF2D);
+			this.sprite = new Sprite(100, 100, 0xedc850);
 		}else if(this.value == 1024) {
-			this.sprite = new Sprite(100, 100, 0xE2B913);
+			this.sprite = new Sprite(100, 100, 0xedc53f);
 		}else if(this.value == 2048) {
-			this.sprite = new Sprite(100, 100, 0xEDC22E);
+			this.sprite = new Sprite(100, 100, 0xedc22e);
 		}else if(this.value == 4096) {
 			this.sprite = new Sprite(100, 100, 0x5DDB92);
 		}else if(this.value == 8192) {
@@ -56,36 +56,45 @@ public class GameObject {
 		}
 	}
 
-	public boolean canMove() {
+	public boolean canMove() { //Checking if the object can move or combine
 		if(x < 0 || x + width > Main.WIDTH || y < 0 || y + height > Main.HEIGHT) {
 			return false;
 		}
 		for(int i = 0; i < Game.objects.size(); i++) {
-			GameObject o = Game.objects.get(i);
-			if(this == o) continue;
-			if(x + width > o.x && x < o.x + o.width && y + height > o.y && y < o.y + o.height && value != o.value) {
+			if(this == Game.objects.get(i)) {
+				continue;
+			}
+			if(x + width > Game.objects.get(i).x && x < Game.objects.get(i).x + Game.objects.get(i).width && y + height > Game.objects.get(i).y && y < Game.objects.get(i).y + Game.objects.get(i).height && value != Game.objects.get(i).value) {
 				return false;
 			}
 		}
 		return true;
 	}
 	
-	public void update() {
+	public void move() { //The moves the blocks make
 		if(Game.moving) {
-			if(!hasMoved) {
-				hasMoved = true;
+			if(Moved == false) {
+				Moved = true;
 			}
 			if(canMove()) {
 				moving = true;
 			}
 			
 			if(moving) {
-				if(Game.dir == 0) x -= speed;
-				if(Game.dir == 1) x += speed;
-				if(Game.dir == 2) y -= speed;
-				if(Game.dir == 3) y += speed;
+				if(Game.direction == 0) {
+					x -= speed; // Left
+				}
+				if(Game.direction == 1) {
+					x += speed; // Right
+				}
+				if(Game.direction == 2) {
+					y -= speed; // Up
+				}
+				if(Game.direction == 3) {
+					y += speed; // Down
+				}
 			}
-			if(!canMove()) {
+			if(canMove() == false) {
 				moving = false;
 				x = Math.round(x / 100) * 100;
 				y = Math.round(y / 100) * 100;
@@ -93,8 +102,7 @@ public class GameObject {
 		}
 	
 	}
-	
-	public void render() {
+	public void render() { //Renders sprite
 		Renderer.renderSprite(sprite, (int) x, (int) y);
 	}
 }
