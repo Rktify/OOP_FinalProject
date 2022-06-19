@@ -65,6 +65,11 @@ public class Game {
 				objects.remove(i);
 			}
 		}
+		//Game over :(
+		if(Game.objects.size() == ((Main.WIDTH/100)*(Main.WIDTH/100))) {
+			System.out.println("You lost :(");
+			System.exit(0);
+		}
 //		System.out.println(objects.size());
 	}
 
